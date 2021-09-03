@@ -184,7 +184,7 @@ class TriggerEvent(PluginBase):
             LOG.debug('OpsGenie CREATE payload: %s' % payload)
 
             try:
-                r = requests.post(OPSGENIE_EVENTS_CREATE_URL, json=payload, headers=headers, timeout=2)
+                r = requests.post(OPSGENIE_EVENTS_CREATE_URL, json=payload, headers=headers, timeout=2, proxy=proxy_dict)
                 LOG.debug('OpsGenie response: %s - %s' % (r.status_code, r.text))
             except Exception as e:
                 raise RuntimeError("OpsGenie connection error: %s" % e)
