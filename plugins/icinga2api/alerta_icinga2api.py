@@ -49,13 +49,13 @@ def icinga2api_payload(alert: Alert):
     return payload
 
 
-class icinga2apiSilence(PluginBase):
+class TriggerEvent(PluginBase):
 
     def __init__(self, name=None):
 
         self.auth = (ICINGA2_USERNAME, ICINGA2_PASSWORD) if ICINGA2_USERNAME else None
 
-        super(icinga2apiSilence, self).__init__(name)
+        super(TriggerEvent, self).__init__(name)
 
     def pre_receive(self, alert):
         return alert
