@@ -23,8 +23,10 @@ OPSGENIE_EVENTS_SNOOZE_URL = 'https://api.opsgenie.com/v2/alerts/%s/snooze?ident
 # OPSGENIE_EVENTS_NOTES_URL = 'https://api.opsgenie.com/v2/alerts/%s/notes?identifierType=alias'
 OPSGENIE_SERVICE_KEY = os.environ.get('OPSGENIE_SERVICE_KEY') or app.config['OPSGENIE_SERVICE_KEY']
 OPSGENIE_TEAMS = os.environ.get('OPSGENIE_TEAMS', '')  # comma separated list of teams
-OPSGENIE_SEND_WARN = os.environ.get('OPSGENIE_SEND_WARN') or app.config.get('OPSGENIE_SEND_WARN', False)
+OPSGENIE_SEND_WARN = os.environ.get('OPSGENIE_SEND_WARN') or app.config['OPSGENIE_SEND_WARN']
 SERVICE_KEY_MATCHERS = os.environ.get('SERVICE_KEY_MATCHERS') or app.config['SERVICE_KEY_MATCHERS']
+OPSGENIE_SEND_ENVIRONMENTS = os.environ.get('OPSGENIE_SEND_ENVIRONMENTS') or \
+                             app.config.get('OPSGENIE_SEND_ENVIRONMENTS', None) # set / list of envs eg. ['prod','dev']
 DASHBOARD_URL = os.environ.get('DASHBOARD_URL') or app.config.get('DASHBOARD_URL', '')
 LOG.info('Initialized: %s key, %s matchers' % (OPSGENIE_SERVICE_KEY, SERVICE_KEY_MATCHERS))
 OPSGENIE_PROXY = os.environ.get('OPSGENIE_PROXY')
@@ -67,6 +69,19 @@ class TriggerEvent(PluginBase):
 
         LOG.debug('No regex match! Default service key: %s' % (OPSGENIE_SERVICE_KEY))
         return OPSGENIE_SERVICE_KEY
+
+    def opsgenie_environment(self, environment):
+        if not OPSGENIE_SEND_ENVIRONMENTS:
+            LOG.debug('No Match for environment will send to all environments')
+            return True
+
+        for env in OPSGENIE_SEND_ENVIRONMENTS:
+            if environment == env:
+                LOG.debug(f'environment {environment} enable for alerting to opsgenie.')
+                return True
+
+        LOG.debug(f'environment {environment} is not enabled for alerting to opsgenie')
+        return False
 
     def opsgenie_close_alert(self, alert, why):
 
@@ -150,7 +165,7 @@ class TriggerEvent(PluginBase):
         # If alerta has cleared or status is closed, send the close to opsgenie
         if (alert.severity in ['cleared', 'normal', 'ok']) or (alert.status == 'closed'):
             r = self.opsgenie_close_alert(alert, 'CREATE-CLOSE')
-        elif (alert.severity in ['warning', 'informational']) and not OPSGENIE_SEND_WARN:
+        elif (alert.severity not in ['major', 'critical', 'security']) and not OPSGENIE_SEND_WARN:
             LOG.info('Just informational or warning not sending to OpsGenie')
         else:
             headers = {
@@ -161,7 +176,7 @@ class TriggerEvent(PluginBase):
             body = alert.get_body(history=False)
             details = {}
             details['web_url'] = '%s/#/alert/%s' % (DASHBOARD_URL, alert.id)
-            details['service'] = alert.service[0] or 'service_not_specified'
+            details['service'] = alert.service[0]
             details['origin'] = body['origin']
             details['event'] = body['event']
             details['group'] = body['group']
