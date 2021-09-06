@@ -1,80 +1,26 @@
-OpsGenie Plugin
-================
+icinga2api Plugin
+=================
 
-Send OpsGenie messages for new alerts.
-
-For help, join [![Slack chat](https://img.shields.io/badge/chat-on%20slack-blue?logo=slack)](https://slack.alerta.dev)
-
-Installation
+installation
 ------------
 
-Clone the GitHub repo and run:
+This is a plugin to allow 2 way comms from the icinga2alerta icinga2 notification plugin.
+Once you have the icinga2 app installed and congigured, you can enable this plugin by:
 
-    $ python setup.py install
+git clone (repo)
+pip3 install plugin-dir/.
+add icinga2api to the list of alerta plugins. (ensure you are in the same venv as alerta)
 
-Or, to install remotely from GitHub run:
-
-    $ pip install git+https://github.com/alerta/alerta-contrib.git#subdirectory=plugins/opsgenie
-
-Note: If Alerta is installed in a python virtual environment then plugins
-need to be installed into the same environment for Alerta to dynamically
-discover them.
 
 Configuration
--------------
+------------
+the following settings are availbale:
 
-Add `opsgenie` to the list of enabled `PLUGINS` in `alertad.conf` server
-configuration file and set plugin-specific variables either in the
-server configuration file or as environment variables.
+    ICINGA2_API_URL > not really required, uses the externalUrl attribute configured in icinga2alerta
+    ICINGA2_USERNAME > your api username as set in /etc/icinga2/conf.d/api-users.conf
+    ICINGA2_PASSWORD > your api password as set in /etc/icinga2/conf.d/api-users.conf
+    ICINGA2_SILENCE_DAYS > used to configure how long acks at set for in icinga, uses alert.timeout or def 1 
+    ICINGA2_SILENCE_FROM_ACK > not tested, no idea. def False
+    
 
-SERVICE_KEY_MATCHERS takes an array of dictionary objects, mapping a regular
-expression to a OpsGenie API integration key.  This allows sending alerts to
-multiple OpsGenie service integrations, based on 'alert.resource'.
-
-```python
-PLUGINS = ['opsgenie']
-OPSGENIE_SERVICE_KEY = ''  # default="not set"
-SERVICE_KEY_MATCHERS = []  # default="not set"
-```
-
-The `DASHBOARD_URL` setting should be configured to link pushover messages to
-the Alerta console:
-
-```python
-DASHBOARD_URL = ''  # default="not set"
-```
-
-The `OPSGENIE_SEND_WARN` setting should be configured if you would like to send
-informational and warning alerts onto OpsGenie.
-
-```python
-OPSGENIE_SEND_WARN = True   # default=True
-```
-
-**Example**
-
-```python
-PLUGINS = ['reject', 'opsgenie']
-OPSGENIE_SERVICE_KEY = '54A634B1-FB0C-4758-840F-5D808C89E70E'
-SERVICE_KEY_MATCHERS = [ {"regex":"proxy[\\d+]","api_key":"6b982ii3l8p834566oo13zx9477p1zxd"} ]
-DASHBOARD_URL = 'https://try.alerta.io'
-OPSGENIE_SEND_WARN = False
-```
-
-References
-----------
-
-  * OpsGenie Integration API: https://www.opsgenie.com/docs/web-api/alert-api
-
-
-WebHook
--------
-At the time of writing, no webhook exists to accept changes from OpsGenie back to Alerta.  Doing
-so may be possible using the standard Alerta API, correlating the originating Alerta id.  This
-id is available as the `alias` field within the OpsGenie incident.
-
-
-License
--------
-
-Copyright (c) 2017 Kurt Westerfeld. Available under the MIT License.
+ 
