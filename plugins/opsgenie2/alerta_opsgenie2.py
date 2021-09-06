@@ -23,7 +23,7 @@ OPSGENIE_EVENTS_SNOOZE_URL = 'https://api.opsgenie.com/v2/alerts/%s/snooze?ident
 # OPSGENIE_EVENTS_NOTES_URL = 'https://api.opsgenie.com/v2/alerts/%s/notes?identifierType=alias'
 OPSGENIE_SERVICE_KEY = os.environ.get('OPSGENIE_SERVICE_KEY') or app.config['OPSGENIE_SERVICE_KEY']
 OPSGENIE_TEAMS = os.environ.get('OPSGENIE_TEAMS', '')  # comma separated list of teams
-OPSGENIE_SEND_WARN = os.environ.get('OPSGENIE_SEND_WARN') or app.config['OPSGENIE_SEND_WARN']
+OPSGENIE_SEND_WARN = os.environ.get('OPSGENIE_SEND_WARN') or app.config.get('OPSGENIE_SEND_WARN', False)
 SERVICE_KEY_MATCHERS = os.environ.get('SERVICE_KEY_MATCHERS') or app.config['SERVICE_KEY_MATCHERS']
 OPSGENIE_SEND_ENVIRONMENTS = os.environ.get('OPSGENIE_SEND_ENVIRONMENTS') or \
                              app.config.get('OPSGENIE_SEND_ENVIRONMENTS', None) # set / list of envs eg. ['prod','dev']
