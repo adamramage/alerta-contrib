@@ -27,7 +27,7 @@ OPSGENIE_SEND_WARN = os.environ.get('OPSGENIE_SEND_WARN') or app.config.get('OPS
 SERVICE_KEY_MATCHERS = os.environ.get('SERVICE_KEY_MATCHERS') or app.config['SERVICE_KEY_MATCHERS']
 DASHBOARD_URL = os.environ.get('DASHBOARD_URL') or app.config.get('DASHBOARD_URL', '')
 LOG.info('Initialized: %s key, %s matchers' % (OPSGENIE_SERVICE_KEY, SERVICE_KEY_MATCHERS))
-OPSGENIE_PROXY = os.environ.get('OPSGENIE_PROXY') or app.config.get('OPSGENIE_PROXY', None)
+OPSGENIE_PROXY = os.environ.get('OPSGENIE_PROXY')
 OPGENIE_SEVERITY_MAP = os.environ.get('OPSGENIE_SEVERITY_MAP', {
     'security': 'P1',
     'critical': 'P1',
@@ -42,7 +42,6 @@ OPGENIE_SEVERITY_MAP = os.environ.get('OPSGENIE_SEVERITY_MAP', {
 }) or app.config.get('OPGENIE_SEVERITY_MAP', None)
 
 proxy_dict = {
-    'http': OPSGENIE_PROXY,
     'https': OPSGENIE_PROXY,
 }
 
