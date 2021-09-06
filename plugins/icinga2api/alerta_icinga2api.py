@@ -67,10 +67,7 @@ class TriggerEvent(PluginBase):
         return alert
 
     def take_action(self, alert: Alert, action: str, text: str, **kwargs) -> Any:
-        '''
-        Send Ack to icinga2 API
-        '''
-        LOG.debug('icinga2api: got alert into plugin %s'.format(alert))
+        LOG.info('icinga2api: got alert into plugin %s'.format(alert))
         if alert.event_type != 'icinga2Alert':
             return alert
 
