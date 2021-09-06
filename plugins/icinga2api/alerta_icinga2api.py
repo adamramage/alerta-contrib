@@ -61,14 +61,13 @@ class TriggerEvent(PluginBase):
         return alert
 
     def post_receive(self, alert):
-        LOG.debug('icinga2api: got something')
         return
 
     def status_change(self, alert, status, text):
         return alert
 
     def take_action(self, alert: Alert, action: str, text: str, **kwargs) -> Any:
-        LOG.info('icinga2api: got alert into plugin %s'.format(alert))
+        LOG.info(f'icinga2api: got alert into plugin {action} {alert.event_type}')
         if alert.event_type != 'icinga2Alert':
             return alert
 
