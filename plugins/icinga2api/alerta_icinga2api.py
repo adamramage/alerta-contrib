@@ -61,6 +61,7 @@ class TriggerEvent(PluginBase):
         return alert
 
     def post_receive(self, alert):
+        LOG.debug('icinga2api: got something')
         return
 
     def status_change(self, alert, status, text):
