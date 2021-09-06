@@ -70,7 +70,7 @@ class TriggerEvent(PluginBase):
         '''
         Send Ack to icinga2 API
         '''
-
+        LOG.debug('icinga2api: got alert into plugin %s'.format(alert))
         if alert.event_type != 'icinga2Alert':
             return alert
 
