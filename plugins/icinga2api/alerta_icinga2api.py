@@ -88,7 +88,7 @@ class TriggerEvent(PluginBase):
             data = icinga2api_payload(alert)
     
             base_url = ICINGA2_API_URL or alert.attributes.get('externalUrl', DEFAULT_ICINGA2_API_URL)
-            url = base_url + ICINGA2_ACK_URL
+            url = base_url.replace('5561', '5665') + ICINGA2_ACK_URL
             
             LOG.debug('icinga2api: Add silence for alertname=%s instance=%s timeout=%s',
                   alert.event, alert.resource, str(silence_seconds))
@@ -98,7 +98,7 @@ class TriggerEvent(PluginBase):
             LOG.debug('icinga2api: data=%s', data)
 
             try:
-                r = requests.post(url,  headers=headers, json=data, auth=self.auth, timeout=2)
+                r = requests.post(url,  headers=headers, verify=False, json=data, auth=self.auth, timeout=2)
             except Exception as e:
                 raise RuntimeError("icinga2api: ERROR - %s" % e)
             LOG.debug('icinga2api: %s - %s', r.status_code, r.text)
@@ -111,13 +111,13 @@ class TriggerEvent(PluginBase):
             data = icinga2api_payload(alert)
 
             base_url = ICINGA2_API_URL or alert.attributes.get('externalUrl', DEFAULT_ICINGA2_API_URL)
-            url = base_url + ICINGA2_UNACK_URL
+            url = base_url.replace('5561', '5665') + ICINGA2_UNACK_URL
 
             LOG.debug('icinga2api: URL=%s', url)
             LOG.debug('icinga2api: data=%s', data)
 
             try:
-                r = requests.post(url, headers=headers, json=data, auth=self.auth, timeout=2)
+                r = requests.post(url, headers=headers, verify=False, json=data, auth=self.auth, timeout=2)
             except Exception as e:
                 raise RuntimeError("icinga2api: ERROR - %s" % e)
             LOG.debug('icinga2api: %s - %s', r.status_code, r.text)
