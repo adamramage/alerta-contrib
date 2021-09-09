@@ -70,13 +70,13 @@ class TriggerEvent(PluginBase):
         LOG.debug('No regex match! Default service key: %s' % (OPSGENIE_SERVICE_KEY))
         return OPSGENIE_SERVICE_KEY
 
-    def opsgenie_environment(self, environment):
+    def opsgenie_environment(self, environment: str):
         if not OPSGENIE_SEND_ENVIRONMENTS:
             LOG.debug('No Match for environment will send to all environments')
             return True
 
         for env in OPSGENIE_SEND_ENVIRONMENTS:
-            if environment == env:
+            if environment.lower() == env.lower():
                 LOG.debug(f'environment {environment} enable for alerting to opsgenie.')
                 return True
 
@@ -229,7 +229,7 @@ class TriggerEvent(PluginBase):
         elif action == 'close':
             r = self.opsgenie_close_alert(alert, 'STATUS-CLOSE')
             LOG.debug('OpsGenie response: %s - %s' % (r.status_code, r.text))
-        elif action == 'shelve':
+        elif action == 'shelve' and alert.status != 'shelved':
             r = self.opsgenie_snooze_alert(alert, 'STATUS-SHELVED')
             LOG.debug('OpsGenie response: %s - %s' % (r.status_code, r.text))
         elif action == 'unshelve':
