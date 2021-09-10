@@ -186,11 +186,12 @@ class TriggerEvent(PluginBase):
             details['duplicateCount'] = body['duplicateCount']
             payload = {
                 "alias": alert.id,
-                "message": "[ %s ]: %s: %s" % (alert.environment, alert.severity, alert.text),
+                "message": "[ %s ]: %s: %s" % (alert.environment, upper(alert.severity), body["event"]),
                 "entity": alert.environment,
                 "responders": self.get_opsgenie_teams(),
                 "tags": [alert.environment, alert.resource, alert.service[0], alert.event],
                 "details": details,
+                "source": "Alerta",
                 "description": alert.text,
                 "priority": OPGENIE_SEVERITY_MAP.get(body['severity'].lower()) or 'P3'
             }
