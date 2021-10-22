@@ -36,10 +36,14 @@ class TriggerEvent(PluginBase):
     def post_receive(self, alert: 'Alert', **kwargs):
         LOG.debug('Alert receive %s: %s' % (alert.id, alert.get_body(history=False)))
         body = alert.get_body(history=False)
-
+        password = "no-pass-set"
         if alert.event_type == "opsgenieHb":
-            password = alert.tags['password']
-            hbname = alert.service
+            for t in alert.tags:
+                if 'password:' in t:
+                    password = t.relace('password:', '')
+                    break
+            hbname = alert.service[0]
+
             url = f"{OPSGENIE_HEARTBEAT_BASE_URL}{hbname}/ping"
             headers = {
                 "Authorization": 'GenieKey ' + password
