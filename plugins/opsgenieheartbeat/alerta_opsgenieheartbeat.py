@@ -12,7 +12,7 @@ except ImportError:
 from alerta.plugins import PluginBase
 from alerta.models.alert import Alert
 
-LOG = logging.getLogger('alerta.plugins.opsgenie-heartbeat')
+LOG = logging.getLogger('alerta.plugins.opsgenieheartbeat')
 LOG.info('Initializing OpsGenie Heartbeat')
 
 OPSGENIE_HEARTBEAT_BASE_URL = "https://api.opsgenie.com/v2/heartbeats/"
