@@ -50,7 +50,7 @@ class TriggerEvent(PluginBase):
                 LOG.debug(f'opsgenieheartbeat: url={url}, proxy={proxy_dict}, heads={headers}')
                 r = requests.post(url, headers=headers, timeout=2, proxies=proxy_dict, verify=False)
                 LOG.debug('OpsGenie HB response to %s: %s - %s' % (url, r.status_code, r.text))
-                if r.status_code != 200:
+                if r.status_code not in (200, 201, 202):
                     alert.severity = "major"
                     alert.text = "Heatbeat is Failing to send outbound to OpsGenie, has Alerta lost comms to OpsGenie/" \
                                  "the internet"
