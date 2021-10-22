@@ -32,7 +32,6 @@ proxy_dict = {
 class TriggerEvent(PluginBase):
     def pre_receive(self, alert: 'Alert', **kwargs):
         LOG.debug('Alert receive %s: %s' % (alert.id, alert.get_body(history=False)))
-        body = alert.get_body(history=False)
         password = "no-pass-set"
         if alert.event_type == "opsgenieHb":
             for t in alert.tags:
@@ -42,9 +41,7 @@ class TriggerEvent(PluginBase):
             hbname = alert.service[0]
 
             url = f"{OPSGENIE_HEARTBEAT_BASE_URL}{hbname}/ping"
-            headers = {
-                "Authorization": 'GenieKey ' + password
-            }
+            headers = {"Authorization": 'GenieKey ' + password}
 
             try:
                 LOG.debug(f'opsgenieheartbeat: url={url}, proxy={proxy_dict}, heads={headers}')
@@ -54,6 +51,8 @@ class TriggerEvent(PluginBase):
                     alert.severity = "major"
                     alert.text = "Heatbeat is Failing to send outbound to OpsGenie, has Alerta lost comms to OpsGenie/" \
                                  "the internet"
+                    return alert
+                else:
                     return alert
             except Exception as e:
                 alert.severity = "major"
