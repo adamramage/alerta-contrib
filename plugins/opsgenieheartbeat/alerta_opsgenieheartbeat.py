@@ -40,7 +40,7 @@ class TriggerEvent(PluginBase):
         if alert.event_type == "opsgenieHb":
             for t in alert.tags:
                 if 'password:' in t:
-                    password = t.relace('password:', '')
+                    password = t.replace('password:', '')
                     break
             hbname = alert.service[0]
 
