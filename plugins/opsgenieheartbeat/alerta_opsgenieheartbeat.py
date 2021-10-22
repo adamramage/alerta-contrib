@@ -58,14 +58,14 @@ class TriggerEvent(PluginBase):
                                  "the internet"
                     return alert
             except Exception as e:
-                # alert.severity = "major"
-                # alert.text = "Heatbeat is Failing to send outbound to OpsGenie, has Alerta lost comms to OpsGenie/" \
-                #              "the internet"
-                # return alert
-                raise RuntimeError("OpsGenie connection error: %s" % e)
+                alert.severity = "major"
+                alert.text = "Heatbeat is Failing to send outbound to OpsGenie, has Alerta lost comms to OpsGenie/" \
+                             "the internet"
+                return alert
+                # raise RuntimeError("OpsGenie connection error: %s" % e)
 
     def status_change(self, alert, status, text):
-        return alert
+        return
 
 
 
