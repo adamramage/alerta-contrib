@@ -31,9 +31,6 @@ proxy_dict = {
 
 class TriggerEvent(PluginBase):
     def pre_receive(self, alert: 'Alert', **kwargs):
-        return alert
-
-    def post_receive(self, alert: 'Alert', **kwargs):
         LOG.debug('Alert receive %s: %s' % (alert.id, alert.get_body(history=False)))
         body = alert.get_body(history=False)
         password = "no-pass-set"
@@ -63,6 +60,9 @@ class TriggerEvent(PluginBase):
                              "the internet"
                 return alert
                 # raise RuntimeError("OpsGenie connection error: %s" % e)
+
+    def post_receive(self, alert: 'Alert', **kwargs):
+        return alert
 
     def status_change(self, alert, status, text):
         return
