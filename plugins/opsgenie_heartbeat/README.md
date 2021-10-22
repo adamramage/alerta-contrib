@@ -22,6 +22,9 @@ discover them.
 
 Configuration
 -------------
+To set a proxy for the https connection (behind FW) you can configure this via env var as eg. if you are using 
+opsgenie plugin then this is already set
+`OPSGENIE_PROXY=http://proxy:3128`
 
 Add `opsgenie-heartbeat` to the list of enabled `PLUGINS` in `alertad.conf` server
 configuration file and set plugin-specific variables either in the
