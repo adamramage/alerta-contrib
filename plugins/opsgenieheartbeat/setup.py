@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 version = '5.0.3'
 
 setup(
-    name="alerta-opsgenie-heartbeat",
+    name="alerta-opsgenieheartbeat",
     version=version,
     description='Alerta plugin for OpsGenie Heartbeat Integration',
     url='https://github.com/alerta/alerta-contrib',
@@ -12,7 +12,7 @@ setup(
     author='Pete Smith',
     author_email='seasurfpete@gmail.com',
     packages=find_packages(),
-    py_modules=['alerta_opsgenie_heartbeat'],
+    py_modules=['alerta_opsgenieheartbeat'],
     install_requires=[
         'requests'
     ],
@@ -20,7 +20,7 @@ setup(
     zip_safe=True,
     entry_points={
         'alerta.plugins': [
-            'opsgenie2 = alerta_opsgenie_heartbeat:TriggerEvent'
+            'opsgenieheartbeat = alerta_opsgenieheartbeat:TriggerEvent'
         ]
     }
 )
