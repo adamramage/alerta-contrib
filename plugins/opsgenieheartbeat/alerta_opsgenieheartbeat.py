@@ -29,7 +29,7 @@ proxy_dict = {
 }
 
 
-class TriggerHeartBeat(PluginBase, ABC):
+class TriggerHeartBeat(PluginBase):
     def pre_receive(self, alert: 'Alert', **kwargs):
         return alert
 
