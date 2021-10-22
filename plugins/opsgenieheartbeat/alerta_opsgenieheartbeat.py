@@ -1,9 +1,6 @@
 import logging
 import os
-import re
 import requests
-from datetime import datetime, timedelta, tzinfo
-from typing import Any
 
 try:
     from alerta.plugins import app  # alerta >= 5.0
@@ -32,7 +29,7 @@ proxy_dict = {
 }
 
 
-class TriggerEvent(PluginBase):
+class TriggerHeartBeat(PluginBase, ABC):
     def pre_receive(self, alert: 'Alert', **kwargs):
         return alert
 
@@ -63,6 +60,8 @@ class TriggerEvent(PluginBase):
                 # return alert
                 raise RuntimeError("OpsGenie connection error: %s" % e)
 
-        def status_change(self, alert: 'Alert', status: str, text: str, **kwargs):
-            return
+    def status_change(self, alert, status, text):
+        return alert
+
+
 
