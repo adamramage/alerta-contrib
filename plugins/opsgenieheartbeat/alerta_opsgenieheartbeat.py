@@ -47,6 +47,7 @@ class TriggerEvent(PluginBase):
             }
 
             try:
+                LOG.debug(f'opsgenieheartbeat: url={url}, proxy={proxy_dict}, heads={headers}')
                 r = requests.post(url, headers=headers, timeout=2, proxies=proxy_dict)
                 LOG.debug('OpsGenie HB response to %s: %s - %s' % (url, r.status_code, r.text))
                 if r.status_code != 200:
