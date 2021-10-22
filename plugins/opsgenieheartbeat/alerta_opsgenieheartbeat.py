@@ -63,6 +63,6 @@ class TriggerEvent(PluginBase):
                 # return alert
                 raise RuntimeError("OpsGenie connection error: %s" % e)
 
-
-
+        def status_change(self, alert: 'Alert', status: str, text: str, **kwargs):
+            return
 
