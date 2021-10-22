@@ -60,6 +60,8 @@ class TriggerEvent(PluginBase):
                              "the internet"
                 return alert
                 # raise RuntimeError("OpsGenie connection error: %s" % e)
+        else:
+            return alert
 
     def post_receive(self, alert: 'Alert', **kwargs):
         return alert
