@@ -3,7 +3,7 @@ from alerta.models.alert import Alert
 from alerta.webhooks import WebhookBase
 
 # Map OpManager Severity codes to Alert ones
-severity_map = {
+SEVERITY_MAP = {
     "Attention": "warning",
     "Trouble": "minor",
     "Critical": "major",
@@ -24,7 +24,7 @@ class OpManagerWebhook(WebhookBase):
             resource=payload['resource'],
             event=payload['event'],
             environment=payload['env'],
-            severity=severity_map.get(payload['severity'], "unknowm"),
+            severity=SEVERITY_MAP.get(payload['severity'], "unknowm"),
             service=[payload['service']],
             group='NetAlert',
             value=payload['value'],
