@@ -186,7 +186,7 @@ class TriggerEvent(PluginBase):
             details['duplicateCount'] = body['duplicateCount']
             payload = {
                 "alias": alert.id,
-                "message": f"[{alert.environment} ]: {str(alert.severity).upper()}: {alert.resource} {resource.service} {body['event']}",
+                "message": f"[{alert.environment} ]: {str(alert.severity).upper()}: {alert.resource} {alert.service} {body['event']}",
                 "entity": alert.environment,
                 "responders": self.get_opsgenie_teams(),
                 "tags": [alert.environment, alert.resource, alert.service[0], alert.event],
