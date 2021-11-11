@@ -21,27 +21,26 @@ class OpManagerWebhookTestCase(unittest.TestCase):
 
         payload = r"""
             {
-            "env": "dev-opman",
-            "event" : "$message",
-            "resource" : "$DeviceField(type)",
-            "service" : "$displayName",
-            "severity" : "$stringseverity",
+            "env": "Production",
+            "event": "$message",
+            "resource" : "testresoursexx",
+            "service" : "$displayNamez",
+            "severity" : "Service Down",
             "group": "$category",
-            "tags" ["opmanager", "oxfx"]
-            "origin": "test_origin"
+            "tags": ["opmanager", "oxfx"],
+            "origin": "test_origin",
             "text": "$message",
-            "attr": {"escalate_to": "$CustomField(Escalate To)"},
+            "attr": {"test":"attra"},
             "value": "$lastPolledValue"
             }"""
 
         response = self.client.post('/webhooks/opmanager', data=payload, content_type='application/json')
         self.assertEqual(response.status_code, 201)
         data = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(data['alert']['resource'], '$DeviceField(type)')
+        self.assertEqual(data['alert']['resource'], 'testresoursexx')
         self.assertEqual(data['alert']['event'], '$message')
-        self.assertEqual(data['alert']['environment'], 'dev-opman')
+        self.assertEqual(data['alert']['environment'], 'Production')
         self.assertEqual(data['alert']['value'], '$lastPolledValue')
         self.assertEqual(data['alert']['text'], '$message')
-        self.assertEqual(sorted(data['alert']['tags']),
-                         ['opmanager', 'oxfx'])
-        self.assertEqual(data['alert']['attributes']['attr'], ['escalate_to"=="$CustomField(Escalate To)'])
+        self.assertEqual(data['alert']['tags'], ['opmanager', 'oxfx'])
+        self.assertEqual(data['alert']['attributes'], {"test": "attra"})

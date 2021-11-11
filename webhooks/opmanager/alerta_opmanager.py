@@ -19,22 +19,21 @@ SEVERITY_MAP = {
 class OpManagerWebhook(WebhookBase):
 
     def incoming(self, query_string, payload):
-
-        return Alert(
+        alert = Alert(
             resource=payload['resource'],
             event=payload['event'],
             environment=payload['env'],
-            severity=SEVERITY_MAP.get(payload['severity'], "unknowm"),
+            severity=SEVERITY_MAP.get(payload['severity'], "warning"),
             service=[payload['service']],
             group='NetAlert',
             value=payload['value'],
             text=f'{payload["text"]}',
-            # tags=['{}={}'.format(k, v) for k, v in payload['tags']],
-            tags=[f'tags={payload["tags"]}'],
-            attributes={'attr': ['{}=={}'.format(k, v) for k, v in payload['attr'].items()]},
+            tags=payload.get('tags', []),
+            attributes=payload.get('attr', {}),
             origin=payload["origin"],
             raw_data=str(payload)
         )
+        return alert
 
 # Payload for opmanager
 # {
