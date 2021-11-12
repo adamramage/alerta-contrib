@@ -39,8 +39,8 @@ def icinga2api_payload(alert: Alert):
     https://icinga.com/docs/icinga-2/latest/doc/12-icinga2-api
     """
     payload = {
-        "type": alert.attributes.get('alertType', 'Service').title(),
-        "filter": f"service.name==\"{alert.service[0]}\" && host.address==\"{alert.resource}\"",
+        "type": alert.attributes.get('alertType', 'service').title(),
+        "filter": f"{alert.attributes.get('alertType', 'service').lower()}.name==\"{alert.service[0]}\" && host.address==\"{alert.resource}\"",
         "author": f'ack from alerta UI',
         "comment": f'this ack was sent from Alerta UI at {datetime.utcnow()} UTC',
         "expiry": (datetime.utcnow() + timedelta(seconds=alert.timeout)).timestamp()
