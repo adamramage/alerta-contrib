@@ -167,6 +167,8 @@ class TriggerEvent(PluginBase):
             r = self.opsgenie_close_alert(alert, 'CREATE-CLOSE')
         elif (alert.severity not in ['major', 'critical', 'security']) and not OPSGENIE_SEND_WARN:
             LOG.info('Just informational or warning not sending to OpsGenie')
+        elif alert.environment not in ['production', 'Production', 'prod']:
+            LOG.info('Filtering event as not production for sending to opsgenie.')
         else:
             headers = {
                 "Authorization": 'GenieKey ' + self.opsgenie_service_key(alert.resource)
