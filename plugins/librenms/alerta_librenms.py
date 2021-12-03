@@ -24,7 +24,6 @@ LIBRENMS_SILENCE_FROM_ACK = os.environ.get('LIBRENMS_SILENCE_FROM_ACK') or app.c
 LIBRENMS_ACK_URL = '/api/v0/alerts'
 LIBRENMS_UNACK_URL = '/api/v0/alerts/unmute/'
 
-headers = {"X-Auth-Token": f"{LIBRENMS_API_KEY}"}
 
 
 def librenms_payload(alert: Alert):
@@ -64,6 +63,8 @@ class TriggerEvent(PluginBase):
         LOG.debug(f'librenms: got alert into plugin {action} {alert.event_type}')
         if alert.event_type != 'libreNMS':
             return alert
+
+        headers = {"X-Auth-Token": f"{alert.attributes.get('return_api_key', LIBRENMS_API_KEY)}"}
 
         if action == 'ack':
             base_url = alert.attributes.get('externalUrl', None)

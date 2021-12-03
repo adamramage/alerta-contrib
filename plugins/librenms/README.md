@@ -31,6 +31,7 @@ Changes to Alerta.php
 .attributes + 'alertid' => $obj['alert_id'],
 .type = 'libreNMS' - used to filter events for callback plugin to know where they came from. was no useful info in it
 .attributes. + 'externalUrl' => 'http://10.108.106.80',
+.attributes +  'return_api_key' => 'xxxx', - this is used to send the api key back to alerta so you can use multiple librenms's. if this doesn't exist then we'll use the env-var above
 
 
 
