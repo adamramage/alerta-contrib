@@ -23,6 +23,7 @@ OPSGENIE_EVENTS_SNOOZE_URL = 'https://api.opsgenie.com/v2/alerts/%s/snooze?ident
 # OPSGENIE_EVENTS_NOTES_URL = 'https://api.opsgenie.com/v2/alerts/%s/notes?identifierType=alias'
 OPSGENIE_SERVICE_KEY = os.environ.get('OPSGENIE_SERVICE_KEY') or app.config['OPSGENIE_SERVICE_KEY']
 OPSGENIE_TEAMS = os.environ.get('OPSGENIE_TEAMS', '')  # comma separated list of teams
+OPSGENIE_DEFAULT_TEAM = os.environ.get('OPSGENIE_DEFAULT_TEAM', 'FPD-Test')  # comma separated list of teams
 OPSGENIE_SEND_WARN = os.environ.get('OPSGENIE_SEND_WARN') or app.config.get('OPSGENIE_SEND_WARN', False)
 SERVICE_KEY_MATCHERS = os.environ.get('SERVICE_KEY_MATCHERS') or app.config['SERVICE_KEY_MATCHERS']
 OPSGENIE_SEND_ENVIRONMENTS = os.environ.get('OPSGENIE_SEND_ENVIRONMENTS') or \
@@ -173,7 +174,7 @@ class TriggerEvent(PluginBase):
             headers = {
                 "Authorization": 'GenieKey ' + self.opsgenie_service_key(alert.resource)
             }
-
+            teams = alert.attributes.get('team', None)
             # Send all alert data as details to opsgenie
             body = alert.get_body(history=False)
             details = {}
@@ -190,7 +191,7 @@ class TriggerEvent(PluginBase):
                 "alias": alert.id,
                 "message": f"[{alert.environment} ]: {str(alert.severity).upper()}: {alert.resource} {alert.service} {body['event']}",
                 "entity": alert.environment,
-                "responders": self.get_opsgenie_teams(),
+                "responders": self.get_opsgenie_teams(teams),
                 "tags": [alert.environment, alert.resource, alert.service[0], alert.event],
                 "details": details,
                 "source": "Alerta",
@@ -214,16 +215,21 @@ class TriggerEvent(PluginBase):
     #     teams = teams.split(',')
     #     return [{"name": team, "type": "team"} for team in teams]
 
-    def get_opsgenie_teams(self):
-        teams = OPSGENIE_TEAMS.replace(' ', '')  # remove whitespace
-        # if len(teams) == 0:
-        #     return []  # no teams specified
-        # teams = teams.split(',')
-        return [
-            {"name": 'FPD-Infra-Testing',
+    def get_opsgenie_teams(self, teams: str):
+        responders = []
+        if teams:
+            for team in teams.split(','):
+                responders.append(
+                    {"name": team,
+                     "type": "team"
+                     }
+                )
+            return responders
+        else:
+            return [{
+             "name": OPSGENIE_DEFAULT_TEAM,
              "type": "team"
-            }
-        ]
+            }]
 
     def status_change(self, alert: 'Alert', status: str, text: str, **kwargs):
         # LOG.debug('Alert change %s to %s: %s' % (alert.id, status, alert.get_body(history=False)))
