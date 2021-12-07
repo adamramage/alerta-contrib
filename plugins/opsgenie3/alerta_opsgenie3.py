@@ -222,7 +222,8 @@ class TriggerEvent(PluginBase):
         return [
             {"name": 'FPD-Infra-Testing',
              "type": "team"
-            } for team in teams]
+            }
+        ]
 
     def status_change(self, alert: 'Alert', status: str, text: str, **kwargs):
         # LOG.debug('Alert change %s to %s: %s' % (alert.id, status, alert.get_body(history=False)))
