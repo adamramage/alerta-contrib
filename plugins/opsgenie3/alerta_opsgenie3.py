@@ -207,12 +207,22 @@ class TriggerEvent(PluginBase):
                 raise RuntimeError("OpsGenie connection error: %s" % e)
 
     # generate list of responders from OPSGENIE_TEAMS env var
+    # def get_opsgenie_teams(self):
+    #     teams = OPSGENIE_TEAMS.replace(' ', '')  # remove whitespace
+    #     if len(teams) == 0:
+    #         return []  # no teams specified
+    #     teams = teams.split(',')
+    #     return [{"name": team, "type": "team"} for team in teams]
+
     def get_opsgenie_teams(self):
         teams = OPSGENIE_TEAMS.replace(' ', '')  # remove whitespace
-        if len(teams) == 0:
-            return []  # no teams specified
-        teams = teams.split(',')
-        return [{"name": team, "type": "team"} for team in teams]
+        # if len(teams) == 0:
+        #     return []  # no teams specified
+        # teams = teams.split(',')
+        return [
+            {"name": 'FPD-Infra-Testing',
+             "type": "team"
+            } for team in teams]
 
     def status_change(self, alert: 'Alert', status: str, text: str, **kwargs):
         # LOG.debug('Alert change %s to %s: %s' % (alert.id, status, alert.get_body(history=False)))
