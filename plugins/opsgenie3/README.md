@@ -31,6 +31,14 @@ SERVICE_KEY_MATCHERS takes an array of dictionary objects, mapping a regular
 expression to a OpsGenie API integration key.  This allows sending alerts to
 multiple OpsGenie service integrations, based on 'alert.resource'.
 
+OPSGENIE_DEFAULT_TEAM is used as a default team for 2 uses. 1, fallback team for alerting if no team is specified in 
+an alert. 2, will always add this team(s) to every message payload. This means that more than 1 team will get the alert 
+and can act on it. This is being used to control alerts to a central NOC desk and have on call teams also receive alerts.
+
+```python
+OPSGENIE_DEFAULT_TEAM = 'Team_A,TeamB'
+```
+
 ```python
 PLUGINS = ['opsgenie']
 OPSGENIE_SERVICE_KEY = ''  # default="not set"
@@ -67,12 +75,9 @@ References
   * OpsGenie Integration API: https://www.opsgenie.com/docs/web-api/alert-api
 
 
-WebHook
--------
-At the time of writing, no webhook exists to accept changes from OpsGenie back to Alerta.  Doing
-so may be possible using the standard Alerta API, correlating the originating Alerta id.  This
-id is available as the `alias` field within the OpsGenie incident.
-
+remote-ack
+----------
+Use the opsGenie EOM tool to via 
 
 License
 -------

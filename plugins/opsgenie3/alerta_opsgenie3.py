@@ -22,12 +22,11 @@ OPSGENIE_EVENTS_UNACK_URL = 'https://api.opsgenie.com/v2/alerts/%s/unacknowledge
 OPSGENIE_EVENTS_SNOOZE_URL = 'https://api.opsgenie.com/v2/alerts/%s/snooze?identifierType=alias'
 # OPSGENIE_EVENTS_NOTES_URL = 'https://api.opsgenie.com/v2/alerts/%s/notes?identifierType=alias'
 OPSGENIE_SERVICE_KEY = os.environ.get('OPSGENIE_SERVICE_KEY') or app.config['OPSGENIE_SERVICE_KEY']
-OPSGENIE_TEAMS = os.environ.get('OPSGENIE_TEAMS', '')  # comma separated list of teams
-OPSGENIE_DEFAULT_TEAM = os.environ.get('OPSGENIE_DEFAULT_TEAM', 'FPD-Test')  # comma separated list of teams
+OPSGENIE_DEFAULT_TEAM = os.environ.get('OPSGENIE_DEFAULT_TEAM', None)  # comma separated list of teams
 OPSGENIE_SEND_WARN = os.environ.get('OPSGENIE_SEND_WARN') or app.config.get('OPSGENIE_SEND_WARN', False)
 SERVICE_KEY_MATCHERS = os.environ.get('SERVICE_KEY_MATCHERS') or app.config['SERVICE_KEY_MATCHERS']
 OPSGENIE_SEND_ENVIRONMENTS = os.environ.get('OPSGENIE_SEND_ENVIRONMENTS') or \
-                             app.config.get('OPSGENIE_SEND_ENVIRONMENTS', None) # set / list of envs eg. ['prod','dev']
+                             app.config.get('OPSGENIE_SEND_ENVIRONMENTS', 'production,Production') # comma sep list of envs.
 DASHBOARD_URL = os.environ.get('DASHBOARD_URL') or app.config.get('DASHBOARD_URL', '')
 LOG.info('Initialized: %s key, %s matchers' % (OPSGENIE_SERVICE_KEY, SERVICE_KEY_MATCHERS))
 OPSGENIE_PROXY = os.environ.get('OPSGENIE_PROXY')
@@ -72,13 +71,9 @@ class TriggerEvent(PluginBase):
         return OPSGENIE_SERVICE_KEY
 
     def opsgenie_environment(self, environment: str):
-        if not OPSGENIE_SEND_ENVIRONMENTS:
-            LOG.debug('No Match for environment will send to all environments')
-            return True
-
-        for env in OPSGENIE_SEND_ENVIRONMENTS:
+        for env in OPSGENIE_SEND_ENVIRONMENTS.split(','):
             if environment.lower() == env.lower():
-                LOG.debug(f'environment {environment} enable for alerting to opsgenie.')
+                LOG.debug(f'environment {environment} enabled for alerting to opsgenie.')
                 return True
 
         LOG.debug(f'environment {environment} is not enabled for alerting to opsgenie')
@@ -157,8 +152,6 @@ class TriggerEvent(PluginBase):
 
     def post_receive(self, alert: 'Alert', **kwargs):
         LOG.debug('Alert receive %s: %s' % (alert.id, alert.get_body(history=False)))
-        body = alert.get_body(history=False)
-        # print(f'{alert} body:{body} {alert.serialize}')
         if alert.repeat:
             LOG.debug('Alert repeating; ignored')
             return
@@ -207,14 +200,7 @@ class TriggerEvent(PluginBase):
             except Exception as e:
                 raise RuntimeError("OpsGenie connection error: %s" % e)
 
-    # generate list of responders from OPSGENIE_TEAMS env var
-    # def get_opsgenie_teams(self):
-    #     teams = OPSGENIE_TEAMS.replace(' ', '')  # remove whitespace
-    #     if len(teams) == 0:
-    #         return []  # no teams specified
-    #     teams = teams.split(',')
-    #     return [{"name": team, "type": "team"} for team in teams]
-
+    # generate list of responders from OPSGENIE_DEFAULT_TEAM and alert team attribute
     def get_opsgenie_teams(self, teams: str):
         responders = []
         if teams:
@@ -224,6 +210,15 @@ class TriggerEvent(PluginBase):
                      "type": "team"
                      }
                 )
+            # Append any default teams to the responds list.
+            if OPSGENIE_DEFAULT_TEAM:
+                LOG.debug('OpsGenie: Append default teams to alert: %s', OPSGENIE_DEFAULT_TEAM)
+                for team in OPSGENIE_DEFAULT_TEAM.split(','):
+                    responders.append(
+                        {"name": team,
+                         "type": "team"
+                         }
+                    )
             return responders
         else:
             return [{
