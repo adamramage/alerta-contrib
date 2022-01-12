@@ -221,10 +221,13 @@ class TriggerEvent(PluginBase):
                     )
             return responders
         else:
-            return [{
-             "name": OPSGENIE_DEFAULT_TEAM,
-             "type": "team"
-            }]
+            for team in OPSGENIE_DEFAULT_TEAM.split(','):
+                responders.append(
+                    {"name": team,
+                     "type": "team"
+                     }
+                )
+            return responders
 
     def status_change(self, alert: 'Alert', status: str, text: str, **kwargs):
         # LOG.debug('Alert change %s to %s: %s' % (alert.id, status, alert.get_body(history=False)))
