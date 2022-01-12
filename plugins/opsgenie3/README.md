@@ -44,6 +44,21 @@ OPSGENIE_DEFAULT_TEAM is used as a default team for 2 uses. 1, fallback team for
 an alert. 2, will always add this team(s) to every message payload. This means that more than 1 team will get the alert 
 and can act on it. This is being used to control alerts to a central NOC desk and have on call teams also receive alerts.
 
+OPSGENIE_SEVERITY_MAP is a dict used to map any severity level to an opsgenie level. 
+eg.
+{
+    'security': 'P1',
+    'critical': 'P1',
+    'major': 'P2',
+    'minor': 'P3',
+    'warning': 'P3',
+    'indeterminate': 'P4',
+    'info': 'P4',
+    'ok': 'P5',
+    'unknown': 'P5',
+    'none': 'P5'
+}
+
 ```python
 OPSGENIE_DEFAULT_TEAM = 'Team_A,TeamB'
 ```
