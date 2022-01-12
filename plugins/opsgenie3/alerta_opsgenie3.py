@@ -221,13 +221,16 @@ class TriggerEvent(PluginBase):
                     )
             return responders
         else:
-            for team in OPSGENIE_DEFAULT_TEAM.split(','):
-                responders.append(
-                    {"name": team,
-                     "type": "team"
-                     }
-                )
-            return responders
+            if OPSGENIE_DEFAULT_TEAM:
+                for team in OPSGENIE_DEFAULT_TEAM.split(','):
+                    responders.append(
+                        {"name": team,
+                         "type": "team"
+                         }
+                    )
+                return responders
+            LOG.error('OpsGenie: No Default Teams listed for escalation')
+            return []
 
     def status_change(self, alert: 'Alert', status: str, text: str, **kwargs):
         # LOG.debug('Alert change %s to %s: %s' % (alert.id, status, alert.get_body(history=False)))
