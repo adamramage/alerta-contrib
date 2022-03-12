@@ -26,6 +26,13 @@ MS_TEAMS_DEFAULT_COLORS_MAP = {'security': '000000',
                               'warning': '1E90FF'}
 MS_TEAMS_DEFAULT_COLOR = '00AA5A'
 MS_TEAMS_DEFAULT_TIMEOUT = 7 # pymsteams http_timeout
+MS_TEAMS_PROXY = os.environ.get('MS_TEAMS_PROXY', None) or app.config.get('MS_TEAMS_PROXY', None)
+
+proxy_dict = {
+    'http': MS_TEAMS_PROXY,
+    'https': MS_TEAMS_PROXY,
+}
+
 
 class SendConnectorCardMessage(PluginBase):
 
@@ -75,7 +82,7 @@ class SendConnectorCardMessage(PluginBase):
 
         if MS_TEAMS_INBOUNDWEBHOOK_URL and MS_TEAMS_APIKEY:
             # Add X-API-Key header for teams(webhook) HttpPOST actions
-            template_vars['headers'] =  '[ {{ "name": "X-API-Key", "value": "{}" }} ]'.format(MS_TEAMS_APIKEY)
+            template_vars['headers'] = '[ {{ "name": "X-API-Key", "value": "{}" }} ]'.format(MS_TEAMS_APIKEY)
             template_vars['webhook_url'] = MS_TEAMS_INBOUNDWEBHOOK_URL
 
         if MS_TEAMS_PAYLOAD:
@@ -124,7 +131,7 @@ class SendConnectorCardMessage(PluginBase):
             if MS_TEAMS_PAYLOAD:
                 # Use requests.post to send raw json message card
                 LOG.debug("MS Teams sending(json payload) POST to %s", MS_TEAMS_WEBHOOK_URL)
-                r = requests.post(MS_TEAMS_WEBHOOK_URL, data=card_json, timeout=MS_TEAMS_DEFAULT_TIMEOUT)
+                r = requests.post(MS_TEAMS_WEBHOOK_URL, data=card_json, timeout=MS_TEAMS_DEFAULT_TIMEOUT, proxies=proxy_dict)
                 LOG.debug('MS Teams response: %s / %s' % (r.status_code, r.text))
             else:
                 # Use pymsteams to send card
