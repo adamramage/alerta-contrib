@@ -20,7 +20,7 @@ class NormaliseAlert(PluginBase):
             LOG.info(f"fxtl : {alert}")
 
             if alert.environment in ('prd', 'prod'):
-                LOG.warning(f"set alert environment to production from {alert.severity} from {alert.origin}")
+                LOG.warning(f"set alert environment to production from {alert.environment} from {alert.origin}")
                 alert.environment = 'production'
         else:
             alert.environment = "unknown"
