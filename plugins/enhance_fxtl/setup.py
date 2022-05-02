@@ -17,7 +17,7 @@ setup(
     zip_safe=True,
     entry_points={
         'alerta.plugins': [
-            'enhance = alerta_enhance:EnhanceAlert'
+            'enhance_fxtl = alerta_enhance_fxtl:EnhanceAlert'
         ]
     }
 )
