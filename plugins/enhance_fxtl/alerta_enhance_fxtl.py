@@ -1,11 +1,12 @@
 
 import logging
+import os
 
 from alerta.plugins import PluginBase
 
 LOG = logging.getLogger('alerta.plugins.enhance_fxtl')
 
-RUNBOOK_URL = 'https://foxsportsau.atlassian.net/wiki/search?text='
+RUNBOOK_URL = os.environ.get('RUNBOOK_URL', 'https://foxsportsau.atlassian.net/wiki/search?text=')
 
 
 class EnhanceAlert(PluginBase):
