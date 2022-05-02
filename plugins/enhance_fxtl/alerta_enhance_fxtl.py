@@ -23,7 +23,7 @@ class EnhanceAlert(PluginBase):
         #     alert.attributes['isOutOfHours'] = False
 
         # Add link to Run Book based on event name
-        alert.attributes['runBookUrl'] = '%s/%s' % (RUNBOOK_URL, alert.event.replace(' ', '-'))
+        alert.attributes['runBookUrl'] = '%s%s' % (RUNBOOK_URL, alert.event.replace(' ', '-'))
 
         return alert
 
