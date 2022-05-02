@@ -15,8 +15,11 @@ class NormaliseAlert(PluginBase):
         alert.text = '%s: %s' % (alert.severity.upper(), alert.text)
 
         alert.severity = alert.severity.lower()
+        tmp = alert.environment.lower()
+        LOG.info(f"fxtl : {alert.environment} - {tmp}")
+        alert.environment = tmp
+        LOG.info(f"fxtl out: {alert.environment} - {tmp}")
 
-        alert.environment = alert.environment.lower()
         # if alert.environment in ('prd', 'prod'):
         #     LOG.warning(f"set alert environment to production from {alert.severity} from {alert.origin}")
         #     alert.environment = 'production'
