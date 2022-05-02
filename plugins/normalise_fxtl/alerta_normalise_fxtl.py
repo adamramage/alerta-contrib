@@ -17,9 +17,9 @@ class NormaliseAlert(PluginBase):
         alert.severity = alert.severity.lower()
 
         alert.environment = alert.environment.lower()
-        if alert.environment in ('prd', 'prod'):
-            LOG.warning(f"set alert environment to production from {alert.severity} from {alert.origin}")
-            alert.environment = 'production'
+        # if alert.environment in ('prd', 'prod'):
+        #     LOG.warning(f"set alert environment to production from {alert.severity} from {alert.origin}")
+        #     alert.environment = 'production'
 
         # supply different default values if missing
         # if not alert.group or alert.group == 'Misc':
