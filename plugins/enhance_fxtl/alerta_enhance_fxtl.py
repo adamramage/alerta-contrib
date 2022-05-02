@@ -3,16 +3,16 @@ import logging
 
 from alerta.plugins import PluginBase
 
-LOG = logging.getLogger('alerta.plugins.enhance')
+LOG = logging.getLogger('alerta.plugins.enhance_fxtl')
 
-RUNBOOK_URL = 'http://www.example.com/wiki/RunBook'   # example only
+RUNBOOK_URL = 'https://foxsportsau.atlassian.net/wiki/search?text='
 
 
 class EnhanceAlert(PluginBase):
 
     def pre_receive(self, alert):
 
-        LOG.info("Enhancing alert...")
+        LOG.info("Enhancing alert foxtel")
 
         # Set "isOutOfHours" flag for later use by notification plugins
         # dayOfWeek = alert.create_time.strftime('%a')
