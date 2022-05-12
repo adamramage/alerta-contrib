@@ -41,14 +41,14 @@ class Worker(object):
             )
         except boto.exception.SQSError as e:
             LOG.error('SQS: ERROR - %s' % e)
-            sys.exit(1)
+            # sys.exit(1)
 
         try:
             self.sqs = connection.create_queue(AWS_SQS_QUEUE)
             self.sqs.set_message_class(RawMessage)
         except boto.exception.SQSError as e:
             LOG.error('SQS: ERROR - %s' % e)
-            sys.exit(1)
+            # sys.exit(1)
 
     def run(self):
 
@@ -77,7 +77,7 @@ def main():
         Worker().run()
     except (SystemExit, KeyboardInterrupt):
         LOG.error('SQS - FAILED QUIT')
-        sys.exit(0)
+        # sys.exit(0)
 
 if __name__ == '__main__':
     main()
