@@ -36,24 +36,24 @@ class Worker(object):
                 AWS_REGION,
                 aws_access_key_id=AWS_ACCESS_KEY_ID,
                 aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-                # proxy=AWS_SQS_PROXY,
-                # proxy_port=AWS_SQS_PROXY_PORT
+                proxy=AWS_SQS_PROXY,
+                proxy_port=AWS_SQS_PROXY_PORT
             )
         except boto.exception.SQSError as e:
             LOG.error('SQS: ERROR - %s' % e)
-            # sys.exit(1)
+            sys.exit(1)
 
         try:
             self.sqs = connection.create_queue(AWS_SQS_QUEUE)
             self.sqs.set_message_class(RawMessage)
         except boto.exception.SQSError as e:
             LOG.error('SQS: ERROR - %s' % e)
-            # sys.exit(1)
+            sys.exit(1)
 
     def run(self):
 
         while True:
-            LOG.debug('Waiting for alert on SQS queue "%s"...' % AWS_SQS_QUEUE)
+            LOG.error('Waiting for alert on SQS queue "%s"...' % AWS_SQS_QUEUE)
             try:
                 message = self.sqs.read(wait_time_seconds=20)
             except boto.exception.SQSError as e:
@@ -77,7 +77,7 @@ def main():
         Worker().run()
     except (SystemExit, KeyboardInterrupt):
         LOG.error('SQS - FAILED QUIT')
-        # sys.exit(0)
+        sys.exit(0)
 
 if __name__ == '__main__':
     main()
