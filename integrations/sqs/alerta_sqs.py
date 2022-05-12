@@ -70,6 +70,8 @@ class Worker(object):
 
 
 def main():
+    LOG.error('SQS - STARTING')
+
     try:
         LOG.error('SQS - STARTING')
         Worker().run()
