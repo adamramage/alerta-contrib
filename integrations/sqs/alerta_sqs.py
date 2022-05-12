@@ -71,8 +71,10 @@ class Worker(object):
 
 def main():
     try:
+        LOG.error('SQS - STARTING')
         Worker().run()
     except (SystemExit, KeyboardInterrupt):
+        LOG.error('SQS - FAILED QUIT')
         sys.exit(0)
 
 if __name__ == '__main__':
