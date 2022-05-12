@@ -26,7 +26,7 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID') or config.get('AWS_ACCES
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY') or config.get('AWS_SECRET_ACCESS_KEY')
 AWS_SQS_QUEUE = os.environ.get('AWS_SQS_QUEUE') or config.get('AWS_SQS_QUEUE', DEFAULT_AWS_SQS_QUEUE)
 AWS_SQS_PROXY = os.environ.get('AWS_SQS_PROXY') or config.get('AWS_SQS_PROXY', None)
-AWS_SQS_PROXY_PORT = os.environ.get('AWS_SQS_PROXY_PORT') or or config.get('AWS_SQS_PROXY_PORT', None)
+AWS_SQS_PROXY_PORT = os.environ.get('AWS_SQS_PROXY_PORT') or config.get('AWS_SQS_PROXY_PORT', None)
 
 class Worker(object):
 
