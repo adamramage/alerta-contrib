@@ -29,16 +29,15 @@ AWS_SQS_PROXY = os.environ.get('AWS_SQS_PROXY') or config.get('AWS_SQS_PROXY', N
 AWS_SQS_PROXY_PORT = os.environ.get('AWS_SQS_PROXY_PORT') or config.get('AWS_SQS_PROXY_PORT', None)
 
 class Worker(object):
-
     def __init__(self):
-        LOG.error('UPDATED PROXY VERSION')
+        LOG.error('SQS UPDATED PROXY VERSION')
         try:
             connection = boto.sqs.connect_to_region(
                 AWS_REGION,
                 aws_access_key_id=AWS_ACCESS_KEY_ID,
                 aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-                proxy=AWS_SQS_PROXY,
-                proxy_port=AWS_SQS_PROXY_PORT
+                # proxy=AWS_SQS_PROXY,
+                # proxy_port=AWS_SQS_PROXY_PORT
             )
         except boto.exception.SQSError as e:
             LOG.error('SQS: ERROR - %s' % e)
