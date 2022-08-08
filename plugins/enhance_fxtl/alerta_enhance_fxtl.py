@@ -25,6 +25,8 @@ class EnhanceAlert(PluginBase):
 
         # Add link to Run Book based on event name
         alert.attributes['runBookUrl'] = '%s%s' % (RUNBOOK_URL, alert.event.replace(' ', '-'))
+        alert.attributes['conflenceLink'] = f'<a href="{RUNBOOK_URL}{alert.event.replace(" ", "-")}>Find in Confluence</a>'
+
 
         return alert
 
