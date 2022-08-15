@@ -4,6 +4,18 @@ import logging
 from alerta.plugins import PluginBase
 
 LOG = logging.getLogger('alerta.plugins.normalise_fxtl')
+SEVERITY_MAP = [
+    'critical',
+    'major',
+    'minor',
+    'warning',
+    'indeterminate',
+    'info',
+    'ok',
+    'unknown',
+    'none'
+]
+
 
 class NormaliseAlert(PluginBase):
 
@@ -15,6 +27,12 @@ class NormaliseAlert(PluginBase):
         alert.text = '%s: %s' % (alert.severity.upper(), alert.text)
 
         alert.severity = alert.severity.lower()
+        # normalize alert severity for unknowns.
+        if alert.severity not in SEVERITY_MAP:
+            old_severity = alert.severity
+            alert.severity = 'unknown'
+            alert.text = f"PROBLEM: incorrect Severity inbound: {old_severity} = {alert.text}"
+
         if alert.environment is not None or alert.environment is not "":
             alert.environment = alert.environment.lower()
             LOG.info(f"fxtl : {alert}")
